@@ -5,11 +5,18 @@ from django.views.generic.edit import FormView, UpdateView
 from django.core.urlresolvers import reverse_lazy
 from forms import UserRegistrationForm
 from forms import ChocolateAddForm
+from django.core.urlresolvers import reverse_lazy
+from django.views.generic.edit import FormView, UpdateView
+from django.views.generic import ListView
+from register.models import *
+
 
 # Create your views here.
-class Home(TemplateView):
-
+class Home(ListView):
     template_name="index.html"
+
+    def get_queryset(self):
+        return Chocolate.objects.all()
 
 class UserRegistrationView(AnonymousRequiredMixin, FormView):
     template_name = "register_user.html"
@@ -20,6 +27,8 @@ class UserRegistrationView(AnonymousRequiredMixin, FormView):
     def form_valid(self, form):
         form.save()
         return FormView.form_valid(self, form)
+
+
 class AddChocolateView(FormView):
     template_name = "add_chocolate.html"
     form_class = ChocolateAddForm
